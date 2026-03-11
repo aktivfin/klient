@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Сайт Актив-Финанс — как работает</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, 'Segoe UI', sans-serif;
+  background: #F1F5F9;
+  color: #0F172A;
+  padding: 32px 16px 60px;
+}
+
+h1 {
+  font-size: 24px; font-weight: 800;
+  text-align: center; margin-bottom: 6px;
+}
+.sub {
+  text-align: center; font-size: 13px;
+  color: #64748B; margin-bottom: 36px;
+}
+
+/* СЕКЦИЯ */
+.section { margin-bottom: 40px; }
+.section-title {
+  font-size: 19px; font-weight: 800;
+  color: #0F172A; margin-bottom: 4px;
+  display: flex; align-items: center; gap: 8px;
+}
+.section-sub {
+  font-size: 13px; color: #64748B;
+  margin-bottom: 16px; padding-left: 32px;
+}
+
+/* КАРТОЧКА ПУТИ */
+.path {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  overflow: hidden;
+}
+.path-step {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #F1F5F9;
+}
+.path-step:last-child { border-bottom: none; }
+
+.step-left {
+  width: 48px;
+  flex-shrink: 0;
+  background: #F8FAFC;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 16px 0;
+  position: relative;
+}
+.step-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #0F172A; color: #C6A96B;
+  font-size: 11px; font-weight: 800;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 1;
+}
+.step-line {
+  position: absolute;
+  top: 44px; bottom: 0;
+  left: 50%; transform: translateX(-50%);
+  width: 2px; background: #E2E8F0;
+}
+.path-step:last-child .step-line { display: none; }
+
+.step-right {
+  flex: 1;
+  padding: 14px 16px;
+}
+.step-title {
+  font-size: 14px; font-weight: 700; color: #0F172A;
+}
+.step-desc {
+  font-size: 12px; color: #64748B;
+  margin-top: 4px; line-height: 1.6;
+}
+.step-result {
+  margin-top: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #F0FDF4;
+  color: #16A34A;
+  font-size: 11px; font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+.step-result.tg { background: #EFF6FF; color: #3B82F6; }
+.step-result.warn { background: #FEF9EC; color: #D97706; }
+
+/* КНОПКИ */
+.btn-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.btn-card {
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid #E2E8F0;
+  padding: 16px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.btn-icon {
+  width: 44px; height: 44px;
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.ic-gold   { background: #C6A96B; }
+.ic-dark   { background: #0F172A; }
+.ic-green  { background: #22C55E; }
+.ic-white  { background: #F1F5F9; }
+.ic-blue   { background: #3B82F6; }
+
+.btn-info { flex: 1; }
+.btn-name {
+  font-size: 14px; font-weight: 800; color: #0F172A;
+}
+.btn-where {
+  font-size: 11px; color: #C6A96B; font-weight: 600;
+  margin-top: 2px;
+}
+.btn-desc {
+  font-size: 12px; color: #64748B;
+  margin-top: 6px; line-height: 1.6;
+}
+.btn-action {
+  margin-top: 8px;
+  font-size: 11px; font-weight: 700;
+  color: #0F172A;
+  background: #F8FAFC;
+  padding: 5px 10px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+/* ИТОГ */
+.result-box {
+  background: #0F172A;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 8px;
+}
+.result-title {
+  color: #C6A96B; font-size: 14px; font-weight: 800;
+  margin-bottom: 12px;
+}
+.result-row {
+  display: flex; gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+.result-row:last-child { margin-bottom: 0; }
+.result-icon { font-size: 18px; flex-shrink: 0; }
+.result-text { font-size: 12px; color: rgba(255,255,255,.7); line-height: 1.6; }
+.result-text strong { color: #fff; }
+
+/* СХЕМА ПОТОКА */
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff;
+  border-radius: 16px;
+  border: 1px solid #E2E8F0;
+  padding: 16px;
+}
+.flow-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-size: 12px;
+}
+.flow-row.fr-user { background: #EFF6FF; }
+.flow-row.fr-site { background: #F0FDF4; }
+.flow-row.fr-send { background: #FEF9EC; }
+.flow-row.fr-tg   { background: #EFF6FF; }
+.flow-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .5px;
+  width: 60px; flex-shrink: 0;
+}
+.fr-user .flow-label { color: #3B82F6; }
+.fr-site .flow-label { color: #16A34A; }
+.fr-send .flow-label { color: #D97706; }
+.fr-tg   .flow-label { color: #3B82F6; }
+.flow-text { font-weight: 600; color: #0F172A; }
+.flow-arrow {
+  text-align: center;
+  color: #CBD5E1;
+  font-size: 16px;
+  padding: 0 16px;
+}
+</style>
+</head>
+<body>
+
+<h1>Сайт Актив-Финанс</h1>
+<div class="sub">Как клиент взаимодействует с сайтом · Кнопки и их назначение</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- РАЗДЕЛ 1: ПУТЬ КЛИЕНТА               -->
+<!-- ══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">🧭 Путь клиента по сайту</div>
+  <div class="section-sub">Что видит и делает человек от захода до заявки</div>
+
+  <div class="path">
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">1</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Заходит на сайт</div>
+        <div class="step-desc">
+          Видит главный экран — тёмный фон, заголовок «Финансирование под залог недвижимости до 70%»
+          и калькулятор справа. Сразу понятно куда попал и что предлагают.
+        </div>
+      </div>
+    </div>
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">2</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Считает сумму в калькуляторе</div>
+        <div class="step-desc">
+          Вводит стоимость своей недвижимости и срок — калькулятор сразу показывает
+          максимальную сумму займа (70%) и ежемесячный платёж. Без регистрации, прямо на месте.
+        </div>
+        <div class="step-result warn">⏱ Занимает 30 секунд</div>
+      </div>
+    </div>
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">3</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Скроллит вниз — изучает</div>
+        <div class="step-desc">
+          Смотрит реальные объекты с суммами, читает как проходит сделка (5 шагов),
+          сравнивает с банком, видит кейсы и отзывы клиентов. Доверие растёт.
+        </div>
+      </div>
+    </div>
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">4</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Решает оставить заявку</div>
+        <div class="step-desc">
+          Три варианта как это сделать — клиент выбирает удобный:
+          через попап, через форму внизу, или написать в чат.
+        </div>
+      </div>
+    </div>
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">5</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Заполняет форму</div>
+        <div class="step-desc">
+          Вводит имя и телефон. Всё — больше ничего не нужно для первого шага.
+          Галочка «Согласие на обработку данных» — обязательна по закону.
+        </div>
+        <div class="step-result">✅ Форма заполнена</div>
+      </div>
+    </div>
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">6</div>
+        <div class="step-line"></div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Нажимает кнопку — заявка улетает</div>
+        <div class="step-desc">
+          Сайт мгновенно отправляет данные в Telegram (вам и второму менеджеру)
+          и сохраняет в базу данных. Клиент видит экран «Заявка принята!»
+        </div>
+        <div class="step-result tg">📨 Telegram получает уведомление</div>
+      </div>
+    </div>
+
+    <div class="path-step">
+      <div class="step-left">
+        <div class="step-num">7</div>
+      </div>
+      <div class="step-right">
+        <div class="step-title">Ждёт звонка</div>
+        <div class="step-desc">
+          На экране написано «Перезвоним в течение 5 минут» и показан номер телефона —
+          клиент может позвонить сам если не хочет ждать.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- РАЗДЕЛ 2: СХЕМА ОТПРАВКИ ЗАЯВКИ      -->
+<!-- ══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">📡 Что происходит когда клиент жмёт кнопку</div>
+  <div class="section-sub">Путь данных от клиента до вас</div>
+
+  <div class="flow">
+    <div class="flow-row fr-user">
+      <div class="flow-label">Клиент</div>
+      <div class="flow-text">👤 Вводит имя, телефон, нажимает кнопку</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row fr-site">
+      <div class="flow-label">Сайт</div>
+      <div class="flow-text">🌐 Проверяет что поля заполнены, показывает «Отправка...»</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row fr-send">
+      <div class="flow-label">Telegram</div>
+      <div class="flow-text">📱 Вам и второму менеджеру приходит сообщение с данными клиента</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row fr-tg">
+      <div class="flow-label">База</div>
+      <div class="flow-text">💾 Заявка сохраняется в таблицу — можно посмотреть в любой момент</div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-row fr-site">
+      <div class="flow-label">Клиент</div>
+      <div class="flow-text">✅ Видит экран «Заявка принята! Перезвоним за 5 минут»</div>
+    </div>
+  </div>
+
+  <div class="result-box" style="margin-top:12px">
+    <div class="result-title">Что приходит вам в Telegram</div>
+    <div class="result-row">
+      <div class="result-icon">🔥</div>
+      <div class="result-text"><strong>Быстрая заявка:</strong> Имя, телефон, город</div>
+    </div>
+    <div class="result-row">
+      <div class="result-icon">📊</div>
+      <div class="result-text"><strong>Из калькулятора:</strong> Телефон + рассчитанная сумма займа</div>
+    </div>
+    <div class="result-row">
+      <div class="result-icon">💬</div>
+      <div class="result-text"><strong>Из попапа:</strong> Имя, телефон, город</div>
+    </div>
+    <div class="result-row">
+      <div class="result-icon">📋</div>
+      <div class="result-text"><strong>С паспортом:</strong> ФИО, серия/номер, телефон + ссылки на фото документов</div>
+    </div>
+    <div class="result-row">
+      <div class="result-icon">💬</div>
+      <div class="result-text"><strong>Из чата:</strong> Текст вопроса который написал клиент</div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════ -->
+<!-- РАЗДЕЛ 3: ВСЕ КНОПКИ                 -->
+<!-- ══════════════════════════════════════ -->
+<div class="section">
+  <div class="section-title">🔘 Все кнопки сайта</div>
+  <div class="section-sub">Где находится каждая кнопка и что делает</div>
+
+  <div class="btn-grid">
+
+    <div class="btn-card">
+      <div class="btn-icon ic-gold">📋</div>
+      <div class="btn-info">
+        <div class="btn-name">«Оставить заявку»</div>
+        <div class="btn-where">📍 Шапка (мобилка) · Главный экран · По всему сайту</div>
+        <div class="btn-desc">
+          Главная кнопка сайта. Встречается несколько раз — в шапке на телефоне,
+          на главном экране, и в других местах. Золотого цвета — самая заметная.
+        </div>
+        <div class="btn-action">→ Открывает всплывающее окно с формой</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-dark" style="color:white;font-size:16px;display:flex;align-items:center;justify-content:center">📐</div>
+      <div class="btn-info">
+        <div class="btn-name">«Рассчитать условия»</div>
+        <div class="btn-where">📍 Главный экран, слева от калькулятора</div>
+        <div class="btn-desc">
+          Тёмная кнопка рядом с золотой. Для тех кто хочет сначала посмотреть форму
+          заявки, а не открывать попап.
+        </div>
+        <div class="btn-action">→ Плавно скроллит к форме заявки внизу страницы</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-gold">🧮</div>
+      <div class="btn-info">
+        <div class="btn-name">«Получить точный расчёт →»</div>
+        <div class="btn-where">📍 Внутри калькулятора на главном экране</div>
+        <div class="btn-desc">
+          После того как клиент посчитал сумму — он вводит телефон и нажимает эту кнопку.
+          Вам приходит сообщение с телефоном и суммой которую клиент рассчитал.
+        </div>
+        <div class="btn-action">→ Отправляет телефон + сумму в Telegram</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-gold" style="font-size:16px">● ₽</div>
+      <div class="btn-info">
+        <div class="btn-name">«● Получить расчёт»</div>
+        <div class="btn-where">📍 Правый нижний угол — всегда видна при скролле</div>
+        <div class="btn-desc">
+          Золотая кнопка которая висит поверх страницы и никуда не уходит.
+          Появляется через 2 секунды после захода. Видна всегда — даже если
+          клиент листает середину страницы.
+        </div>
+        <div class="btn-action">→ Открывает всплывающее окно с формой</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon" style="background:#22C55E;font-size:20px;display:flex;align-items:center;justify-content:center">💬</div>
+      <div class="btn-info">
+        <div class="btn-name">Кнопка чата (иконка 💬)</div>
+        <div class="btn-where">📍 Правый нижний угол, выше золотой кнопки</div>
+        <div class="btn-desc">
+          Тёмный круг с иконкой чата и зелёной точкой «онлайн». Для тех кто
+          не хочет сразу звонить, но хочет задать вопрос текстом.
+          Бот не отвечает сам — вопрос сразу летит вам в Telegram.
+        </div>
+        <div class="btn-action">→ Открывает окно чата</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-gold">📨</div>
+      <div class="btn-info">
+        <div class="btn-name">«Получить консультацию →»</div>
+        <div class="btn-where">📍 Форма быстрой заявки (блок 11, тёмный фон)</div>
+        <div class="btn-desc">
+          Кнопка в основной форме внизу страницы. Клиент заполняет имя, телефон,
+          город и нажимает — заявка уходит.
+        </div>
+        <div class="btn-action">→ Отправляет заявку в Telegram и базу данных</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-dark" style="font-size:16px;display:flex;align-items:center;justify-content:center;color:white">🪪</div>
+      <div class="btn-info">
+        <div class="btn-name">«Отправить заявку с документами →»</div>
+        <div class="btn-where">📍 Форма с паспортными данными (блок 12)</div>
+        <div class="btn-desc">
+          Для клиентов которые хотят ускоренное рассмотрение за 2 часа.
+          Заполняют ФИО, серию и номер паспорта, прикрепляют фото.
+          Документы сохраняются в защищённое хранилище.
+        </div>
+        <div class="btn-action">→ Отправляет данные + ссылки на документы в Telegram</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-white" style="font-size:20px;display:flex;align-items:center;justify-content:center">📞</div>
+      <div class="btn-info">
+        <div class="btn-name">Телефон 8 (902) 648-08-60</div>
+        <div class="btn-where">📍 Шапка · Мобильное меню · Контакты · Футер</div>
+        <div class="btn-desc">
+          Кликабельный номер телефона. На мобильном — нажатие сразу открывает звонок.
+          На компьютере — просто номер для набора вручную.
+        </div>
+        <div class="btn-action">→ Звонок напрямую</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon" style="background:#29B6F6;font-size:20px;display:flex;align-items:center;justify-content:center">✈️</div>
+      <div class="btn-info">
+        <div class="btn-name">Иконка Telegram в футере</div>
+        <div class="btn-where">📍 Самый низ страницы, правый угол</div>
+        <div class="btn-desc">
+          Ссылка на Telegram. Сейчас ведёт на пустую страницу — нужно добавить
+          ссылку на ваш канал или личку.
+        </div>
+        <div class="btn-action">→ Открывает Telegram (нужно добавить ссылку)</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon" style="background:#25D366;font-size:20px;display:flex;align-items:center;justify-content:center">💬</div>
+      <div class="btn-info">
+        <div class="btn-name">Иконка WhatsApp в футере</div>
+        <div class="btn-where">📍 Самый низ страницы, правый угол</div>
+        <div class="btn-desc">
+          Ссылка на WhatsApp. Уже настроена на номер 8 (902) 648-08-60 — нажатие
+          сразу открывает чат с вами.
+        </div>
+        <div class="btn-action">→ Открывает WhatsApp чат с вами</div>
+      </div>
+    </div>
+
+    <div class="btn-card">
+      <div class="btn-icon ic-white" style="font-size:20px;display:flex;align-items:center;justify-content:center">❓</div>
+      <div class="btn-info">
+        <div class="btn-name">Вопросы в блоке FAQ</div>
+        <div class="btn-where">📍 Блок 13 — «Частые вопросы»</div>
+        <div class="btn-desc">
+          Каждый вопрос — кликабельный. Нажимаешь — раскрывается ответ.
+          Нажимаешь другой — первый закрывается. Один открыт в один момент.
+        </div>
+        <div class="btn-action">→ Раскрывает ответ на вопрос</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════ -->
+<!-- ИТОГ                                  -->
+<!-- ══════════════════════════════════════ -->
+<div class="result-box">
+  <div class="result-title">Итого: 3 способа получить заявку от клиента</div>
+  <div class="result-row">
+    <div class="result-icon">1️⃣</div>
+    <div class="result-text"><strong>Быстро</strong> — имя и телефон через попап или форму. Самый частый вариант.</div>
+  </div>
+  <div class="result-row">
+    <div class="result-icon">2️⃣</div>
+    <div class="result-text"><strong>С расчётом</strong> — из калькулятора. Клиент уже знает сумму — разговор сразу предметный.</div>
+  </div>
+  <div class="result-row">
+    <div class="result-icon">3️⃣</div>
+    <div class="result-text"><strong>С документами</strong> — паспорт и второй документ. Рассмотрение за 2 часа.</div>
+  </div>
+</div>
+
+</body>
+</html>
